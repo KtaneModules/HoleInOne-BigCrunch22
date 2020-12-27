@@ -147,7 +147,7 @@ public class HoleInOneScript : MonoBehaviour
 		BallColors[Press].GetComponent<KMSelectable>().AddInteractionPunch(0.2f);
 		if (Pressable)
 		{
-			Debug.LogFormat("[Hole In One #{0}] You used Golf Ball #{1}", moduleId, (Press + 1).ToString());
+			Debug.LogFormat("[Hole in One #{0}] You used Golf Ball #{1}", moduleId, (Press + 1).ToString());
 			Audio.PlaySoundAtTransform(SFX[4].name, transform);
 			if (Press != BallValue)
 			{
@@ -158,28 +158,28 @@ public class HoleInOneScript : MonoBehaviour
 			Everything2.SetActive(true);
 			if (Bomb.GetSerialNumberNumbers().Last() % 2 == 0)
 			{
-				Debug.LogFormat("[Hole In One #{0}] The last digit of the serial is even. You must perform the Caesar shift forwards.", moduleId);
-				Debug.LogFormat("[Hole In One #{0}] The focused letter is {1}", moduleId, numberTable[BallValue, StoredValue % 5]);
+				Debug.LogFormat("[Hole in One #{0}] The last digit of the serial is even. You must perform the Caesar shift forwards.", moduleId);
+				Debug.LogFormat("[Hole in One #{0}] The focused letter is {1}", moduleId, numberTable[BallValue, StoredValue % 5]);
 				PowerNeeded = (Array.IndexOf(Alphabreak, numberTable[BallValue, StoredValue % 5]) + StoredValue) % 26;
-				Debug.LogFormat("[Hole In One #{0}] After performing the Caesar shift, the current letter must be the letter \"{1}\"", moduleId, Alphabreak[PowerNeeded]);
+				Debug.LogFormat("[Hole in One #{0}] After performing the Caesar shift, the current letter must be the letter \"{1}\"", moduleId, Alphabreak[PowerNeeded]);
 				PowerNeeded = 25 - PowerNeeded;
-				Debug.LogFormat("[Hole In One #{0}] After performing the Atbash cipher, the correct letter must be \"{1}\"", moduleId, Alphabreak[PowerNeeded]);
-				Debug.LogFormat("[Hole In One #{0}] You must hit the ball when the power level is {1}", moduleId, (PowerNeeded+1).ToString());
+				Debug.LogFormat("[Hole in One #{0}] After performing the Atbash cipher, the correct letter must be \"{1}\"", moduleId, Alphabreak[PowerNeeded]);
+				Debug.LogFormat("[Hole in One #{0}] You must hit the ball when the power level is {1}", moduleId, (PowerNeeded+1).ToString());
 			}
 			
 			else
 			{
-				Debug.LogFormat("[Hole In One #{0}] The last digit of the serial is odd. You must perform the Caesar shift backwards.", moduleId);
-				Debug.LogFormat("[Hole In One #{0}] The focused letter is {1}", moduleId, numberTable[BallValue, StoredValue % 5]);
+				Debug.LogFormat("[Hole in One #{0}] The last digit of the serial is odd. You must perform the Caesar shift backwards.", moduleId);
+				Debug.LogFormat("[Hole in One #{0}] The focused letter is {1}", moduleId, numberTable[BallValue, StoredValue % 5]);
 				PowerNeeded = Array.IndexOf(Alphabreak, numberTable[BallValue, StoredValue % 5]) - StoredValue;
 				while (PowerNeeded < 0)
 				{
 					PowerNeeded += 26;
 				}
-				Debug.LogFormat("[Hole In One #{0}] After performing the Caesar shift, the current letter must be the letter \"{1}\"", moduleId, Alphabreak[PowerNeeded]);
+				Debug.LogFormat("[Hole in One #{0}] After performing the Caesar shift, the current letter must be the letter \"{1}\"", moduleId, Alphabreak[PowerNeeded]);
 				PowerNeeded = 25 - PowerNeeded;
-				Debug.LogFormat("[Hole In One #{0}] After performing the Atbash cipher, the correct letter must be \"{1}\"", moduleId, Alphabreak[PowerNeeded]);
-				Debug.LogFormat("[Hole In One #{0}] You must hit the ball when the power level is {1}", moduleId, (PowerNeeded+1).ToString());
+				Debug.LogFormat("[Hole in One #{0}] After performing the Atbash cipher, the correct letter must be \"{1}\"", moduleId, Alphabreak[PowerNeeded]);
+				Debug.LogFormat("[Hole in One #{0}] You must hit the ball when the power level is {1}", moduleId, (PowerNeeded+1).ToString());
 			}
 			Pressable = false;
 			AbleToHillBall = true;
@@ -203,10 +203,10 @@ public class HoleInOneScript : MonoBehaviour
 		{
 			if (!Clicked)
 			{
-				Debug.LogFormat("[Hole In One #{0}] You pressed on the circle when the module had {1} solves.", moduleId, Bomb.GetSolvedModuleNames().Count().ToString());
-				Debug.LogFormat("[Hole In One #{0}] The correct total based on the current solve: {1}", moduleId, GatheredNumber.ToString());
-				Debug.LogFormat("[Hole In One #{0}] You must use Golf Stick #{1}", moduleId, (GatheredNumber % 5 + 1).ToString());
-				Debug.LogFormat("[Hole In One #{0}] You used Golf Stick #{1}", moduleId, (StickNum + 1).ToString());
+				Debug.LogFormat("[Hole in One #{0}] You pressed on the circle when the module had {1} solves.", moduleId, Bomb.GetSolvedModuleNames().Count().ToString());
+				Debug.LogFormat("[Hole in One #{0}] The correct total based on the current solve: {1}", moduleId, GatheredNumber.ToString());
+				Debug.LogFormat("[Hole in One #{0}] You must use Golf Stick #{1}", moduleId, (GatheredNumber % 5 + 1).ToString());
+				Debug.LogFormat("[Hole in One #{0}] You used Golf Stick #{1}", moduleId, (StickNum + 1).ToString());
 				StoredValue = GatheredNumber;
 				if (StickNum != StoredValue % 5)
 				{
@@ -220,10 +220,10 @@ public class HoleInOneScript : MonoBehaviour
 					yield return new WaitForSecondsRealtime(.2f);
 				}
 				Pressable = true;
-				Debug.LogFormat("[Hole In One #{0}] {1}", moduleId, Log);
-				Debug.LogFormat("[Hole In One #{0}] Values for each RGB components: R - {1}, G - {2}, B - {3}", moduleId, rValue.ToString(), gValue.ToString(), bValue.ToString());
-				Debug.LogFormat("[Hole In One #{0}] If multiplied properly, the answer should be: {1}", moduleId, (1 * (rValue != 0 ? rValue : 1) * (gValue != 0 ? gValue : 1) * (bValue != 0 ? bValue : 1)).ToString());
-				Debug.LogFormat("[Hole In One #{0}] You must use Golf Ball #{1}", moduleId, (BallValue + 1).ToString());
+				Debug.LogFormat("[Hole in One #{0}] {1}", moduleId, Log);
+				Debug.LogFormat("[Hole in One #{0}] Values for each RGB components: R - {1}, G - {2}, B - {3}", moduleId, rValue.ToString(), gValue.ToString(), bValue.ToString());
+				Debug.LogFormat("[Hole in One #{0}] If multiplied properly, the answer should be: {1}", moduleId, (1 * (rValue != 0 ? rValue : 1) * (gValue != 0 ? gValue : 1) * (bValue != 0 ? bValue : 1)).ToString());
+				Debug.LogFormat("[Hole in One #{0}] You must use Golf Ball #{1}", moduleId, (BallValue + 1).ToString());
 				
 			}
 		}
@@ -415,13 +415,13 @@ public class HoleInOneScript : MonoBehaviour
 		}
 		Audio.PlaySoundAtTransform(SFX[0].name, transform);
 		AbleToHillBall = false;
-		Debug.LogFormat("[Hole In One #{0}] You hit the ball with a power level of {1}", moduleId, HoldValue != 27 ? HoldValue.ToString() : "???");
+		Debug.LogFormat("[Hole in One #{0}] You hit the ball with a power level of {1}", moduleId, HoldValue != 27 ? HoldValue.ToString() : "???");
 		BallHold.GetComponent<KMSelectable>().AddInteractionPunch(((float)HoldValue/10f));
 		BallHold.SetActive(false);
 		yield return new WaitForSecondsRealtime(3f);
 		if (IncorrectAnswer)
 		{
-			Debug.LogFormat("[Hole In One #{0}] You did something incorrectly. The module striked and performed a reset.", moduleId);
+			Debug.LogFormat("[Hole in One #{0}] You did something incorrectly. The module striked and performed a reset.", moduleId);
 			Audio.PlaySoundAtTransform(SFX[3].name, transform);
 			yield return new WaitForSecondsRealtime(0.75f);
 			Module.HandleStrike();
@@ -437,7 +437,7 @@ public class HoleInOneScript : MonoBehaviour
 		
 		else
 		{
-			Debug.LogFormat("[Hole In One #{0}] You did everything correctly. The module solved.", moduleId);
+			Debug.LogFormat("[Hole in One #{0}] You did everything correctly. The module solved.", moduleId);
 			Audio.PlaySoundAtTransform(SFX[2].name, transform);
 			yield return new WaitForSecondsRealtime(0.75f);
 			Audio.PlaySoundAtTransform(SFX[1].name, transform);
