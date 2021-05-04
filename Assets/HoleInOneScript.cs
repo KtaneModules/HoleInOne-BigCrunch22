@@ -28,7 +28,7 @@ public class HoleInOneScript : MonoBehaviour
 	
 	int StickNum = 0, GatheredNumber = 0, SolveCount = -1, BallValue = 0, HoldValue = 0, PowerNeeded = 0, StoredValue = 0;
 	int rValue = 0,  gValue = 0, bValue = 0;
-	bool Clicked = false, IncorrectAnswer = false, Pressable = false, AbleToHillBall = false;
+	bool Clicked = false, IncorrectAnswer = false, Pressable = false, AbleToHillBall = false, Checking = false;
 	string Focus = "", Log = "";
 	string[] Alphabreak = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 	Coroutine Hold;
@@ -409,6 +409,7 @@ public class HoleInOneScript : MonoBehaviour
 	
 	IEnumerator Toss()
 	{
+		Checking = true;
 		if (HoldValue != PowerNeeded + 1)
 		{
 			IncorrectAnswer = true;
@@ -445,6 +446,7 @@ public class HoleInOneScript : MonoBehaviour
 			TextAndShadow[0].text = "Hole In One";
 			TextAndShadow[1].text = "Hole In One";
 		}
+		Checking = false;
 	}
 	
 	//twitch plays
@@ -555,6 +557,56 @@ public class HoleInOneScript : MonoBehaviour
 				yield return null;
 			}
 			BallHold.GetComponent<KMSelectable>().OnInteractEnded();
+			if (IncorrectAnswer)
+				yield return "strike";
+			else
+				yield return "solve";
 		}
+	}
+
+	IEnumerator TwitchHandleForcedSolve()
+    {
+		if (IncorrectAnswer)
+        {
+			StopAllCoroutines();
+			Everything1.SetActive(false);
+			Everything2.SetActive(true);
+			BallHold.SetActive(false);
+			Audio.PlaySoundAtTransform(SFX[1].name, transform);
+			Module.HandlePass();
+			TextAndShadow[0].text = "Hole In One";
+			TextAndShadow[1].text = "Hole In One";
+			yield break;
+        }
+		if (!Checking)
+        {
+			if (!Clicked)
+			{
+				while (StickNum != (GatheredNumber % 5))
+				{
+					if (StickNum < (GatheredNumber % 5))
+					{
+						ArrowsAndCircle[2].OnInteract();
+						yield return new WaitForSecondsRealtime(0.1f);
+					}
+					else if (StickNum > (GatheredNumber % 5))
+					{
+						ArrowsAndCircle[0].OnInteract();
+						yield return new WaitForSecondsRealtime(0.1f);
+					}
+				}
+				ArrowsAndCircle[1].OnInteract();
+			}
+			if (!AbleToHillBall)
+			{
+				while (!Pressable) yield return true;
+				BallColors[BallValue].GetComponent<KMSelectable>().OnInteract();
+				yield return new WaitForSecondsRealtime(0.1f);
+			}
+			BallHold.GetComponent<KMSelectable>().OnInteract();
+			while (HoldValue != PowerNeeded + 1) yield return null;
+			BallHold.GetComponent<KMSelectable>().OnInteractEnded();
+		}
+		while (Checking) yield return true;
 	}
 }
