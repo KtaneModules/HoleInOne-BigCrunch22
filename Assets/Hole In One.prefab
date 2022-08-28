@@ -386,6 +386,7 @@ GameObject:
   - component: {fileID: 114152888257085256}
   - component: {fileID: 114901595398170666}
   - component: {fileID: 114377564062566934}
+  - component: {fileID: 114063473455129764}
   m_Layer: 0
   m_Name: Hole In One
   m_TagString: Untagged
@@ -2206,6 +2207,18 @@ MonoBehaviour:
   AllowSelectionWrapY: 0
   ForceSelectionHighlight: 0
   ForceInteractionHighlight: 0
+--- !u!114 &114063473455129764
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1449705670372138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adf69c2de51bd3c43bbd9bc22578ee08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _seed: 2
 --- !u!114 &114097752859842306
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2392,6 +2405,7 @@ MonoBehaviour:
   Bomb: {fileID: 114462751407237582}
   Audio: {fileID: 114104637793719262}
   Module: {fileID: 114152888257085256}
+  RuleSeed: {fileID: 114063473455129764}
   SFX:
   - {fileID: 8300000, guid: 4ce51f67c070a3a419272af4d1065574, type: 3}
   - {fileID: 8300000, guid: cfb3c854c0f852e4889d332604aa4fc6, type: 3}

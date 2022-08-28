@@ -11,6 +11,7 @@ public class HoleInOneScript : MonoBehaviour
 	public KMBombInfo Bomb;
     public KMAudio Audio;
     public KMBombModule Module;
+	public KMRuleSeedable RuleSeed;
 	
 	public AudioClip[] SFX;
 	public KMSelectable[] ArrowsAndCircle;
@@ -18,18 +19,26 @@ public class HoleInOneScript : MonoBehaviour
 	public GameObject Everything1, Everything2, BallHold;
 	public TextMesh[] TextAndShadow;
 	
-	string[,] numberTable = new string[5,5]{
-        {"V", "W", "F", "R", "T"},
-        {"E", "U", "X", "D", "I"},
-        {"O", "M", "P", "B", "Q"},
-        {"J", "H", "N", "L", "Z"},
-        {"C", "G", "Y", "A", "S"}
+	string[][] NumberTable = new string[][]{
+        new string[] {"V", "W", "F", "R", "T"},
+        new string[] {"E", "U", "X", "D", "I"},
+        new string[] {"O", "M", "P", "B", "Q"},
+        new string[] {"J", "H", "N", "L", "Z"},
+        new string[] {"C", "G", "Y", "A", "S"}
     };
+	
+	int[][] RuleNumbers = {
+		new int[] {4, 2, 3, 12, 1, 8},
+		new int[] {6, 3, 1, 4, 2, 9},
+		new int[] {7, 1, 6, 8, 13, 5},
+		new int[] {4, 2, 3, 12, 1, 8},
+		new int[] {12, 10, 18, 5, 7, 3}
+	};
 	
 	int StickNum = 0, GatheredNumber = 0, SolveCount = -1, BallValue = 0, HoldValue = 0, PowerNeeded = 0, StoredValue = 0;
 	int rValue = 0,  gValue = 0, bValue = 0;
 	bool Clicked = false, IncorrectAnswer = false, Pressable = false, AbleToHillBall = false, Checking = false;
-	string Focus = "", Log = "";
+	string Log = "";
 	string[] Alphabreak = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 	Coroutine Hold;
 
@@ -67,6 +76,24 @@ public class HoleInOneScript : MonoBehaviour
 	
 	void Start()
 	{
+		var RuleSeedRNG = RuleSeed.GetRNG();
+		Debug.LogFormat("[Hole in One #{0}] Ruleseed Number: {1}", moduleId, RuleSeedRNG.Seed.ToString());
+		if (RuleSeedRNG.Seed != 1)
+		{
+			string[] ShuffledLetters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+			RuleSeedRNG.ShuffleFisherYates(ShuffledLetters);
+			for (int x = 0; x < 25; x++)
+			{
+				NumberTable[x/5][x%5] = ShuffledLetters[x];
+			}
+			for (int x = 0; x < RuleNumbers.Length; x++)
+			{
+				for (int y = 0; y < RuleNumbers[x].Length; y++)
+				{
+					RuleNumbers[x][y] = RuleSeedRNG.Next(1,21);
+				}
+			}
+		}
 		Log = "Golf ball colors: ";
 		StickNum = UnityEngine.Random.Range(0,5);
 		Sticks.Shuffle();
@@ -159,8 +186,8 @@ public class HoleInOneScript : MonoBehaviour
 			if (Bomb.GetSerialNumberNumbers().Last() % 2 == 0)
 			{
 				Debug.LogFormat("[Hole in One #{0}] The last digit of the serial is even. You must perform the Caesar shift forwards.", moduleId);
-				Debug.LogFormat("[Hole in One #{0}] The focused letter is {1}", moduleId, numberTable[BallValue, StoredValue % 5]);
-				PowerNeeded = (Array.IndexOf(Alphabreak, numberTable[BallValue, StoredValue % 5]) + StoredValue) % 26;
+				Debug.LogFormat("[Hole in One #{0}] The focused letter is {1}", moduleId, NumberTable[StoredValue % 5][BallValue]);
+				PowerNeeded = (Array.IndexOf(Alphabreak, NumberTable[StoredValue % 5][BallValue]) + StoredValue) % 26;
 				Debug.LogFormat("[Hole in One #{0}] After performing the Caesar shift, the current letter must be the letter \"{1}\"", moduleId, Alphabreak[PowerNeeded]);
 				PowerNeeded = 25 - PowerNeeded;
 				Debug.LogFormat("[Hole in One #{0}] After performing the Atbash cipher, the correct letter must be \"{1}\"", moduleId, Alphabreak[PowerNeeded]);
@@ -170,8 +197,8 @@ public class HoleInOneScript : MonoBehaviour
 			else
 			{
 				Debug.LogFormat("[Hole in One #{0}] The last digit of the serial is odd. You must perform the Caesar shift backwards.", moduleId);
-				Debug.LogFormat("[Hole in One #{0}] The focused letter is {1}", moduleId, numberTable[BallValue, StoredValue % 5]);
-				PowerNeeded = Array.IndexOf(Alphabreak, numberTable[BallValue, StoredValue % 5]) - StoredValue;
+				Debug.LogFormat("[Hole in One #{0}] The focused letter is {1}", moduleId, NumberTable[StoredValue % 5][BallValue]);
+				PowerNeeded = Array.IndexOf(Alphabreak, NumberTable[StoredValue % 5][BallValue]) - StoredValue;
 				while (PowerNeeded < 0)
 				{
 					PowerNeeded += 26;
@@ -249,22 +276,22 @@ public class HoleInOneScript : MonoBehaviour
 			switch (Bomb.GetSolvedModuleNames().Count())
 			{
 				case 0: case 1: case 2: case 3:
-					GatheredNumber += 4;
+					GatheredNumber += RuleNumbers[0][0];
 					break;
 				case 4: case 5: case 6:
-					GatheredNumber += 2;
+					GatheredNumber += RuleNumbers[0][1];
 					break;
 				case 7: case 8: case 9:
-					GatheredNumber += 3;
+					GatheredNumber += RuleNumbers[0][2];
 					break;
 				case 10: case 11: case 12:
-					GatheredNumber += 12;
+					GatheredNumber += RuleNumbers[0][3];
 					break;
 				case 13: case 14: case 15:
-					GatheredNumber += 1;
+					GatheredNumber += RuleNumbers[0][4];
 					break;
 				default:
-					GatheredNumber += 8;
+					GatheredNumber += RuleNumbers[0][5];
 					break;
 			}
 		}
@@ -275,22 +302,22 @@ public class HoleInOneScript : MonoBehaviour
 			switch (Bomb.GetSolvedModuleNames().Count())
 			{
 				case 0: case 1: case 2: case 3:
-					GatheredNumber += 6;
+					GatheredNumber += RuleNumbers[1][0];
 					break;
 				case 4: case 5: case 6:
-					GatheredNumber += 3;
+					GatheredNumber += RuleNumbers[1][1];
 					break;
 				case 7: case 8: case 9:
-					GatheredNumber += 1;
+					GatheredNumber += RuleNumbers[1][2];
 					break;
 				case 10: case 11: case 12:
-					GatheredNumber += 4;
+					GatheredNumber += RuleNumbers[1][3];
 					break;
 				case 13: case 14: case 15:
-					GatheredNumber += 2;
+					GatheredNumber += RuleNumbers[1][4];
 					break;
 				default:
-					GatheredNumber += 9;
+					GatheredNumber += RuleNumbers[1][5];
 					break;
 			}
 		}
@@ -301,22 +328,22 @@ public class HoleInOneScript : MonoBehaviour
 			switch (Bomb.GetSolvedModuleNames().Count())
 			{
 				case 0: case 1: case 2: case 3:
-					GatheredNumber += 7;
+					GatheredNumber += RuleNumbers[2][0];
 					break;
 				case 4: case 5: case 6:
-					GatheredNumber += 1;
+					GatheredNumber += RuleNumbers[2][1];
 					break;
 				case 7: case 8: case 9:
-					GatheredNumber += 6;
+					GatheredNumber += RuleNumbers[2][2];
 					break;
 				case 10: case 11: case 12:
-					GatheredNumber += 8;
+					GatheredNumber += RuleNumbers[2][3];
 					break;
 				case 13: case 14: case 15:
-					GatheredNumber += 13;
+					GatheredNumber += RuleNumbers[2][4];
 					break;
 				default:
-					GatheredNumber += 5;
+					GatheredNumber += RuleNumbers[2][5];
 					break;
 			}
 		}
@@ -327,22 +354,22 @@ public class HoleInOneScript : MonoBehaviour
 			switch (Bomb.GetSolvedModuleNames().Count())
 			{
 				case 0: case 1: case 2: case 3:
-					GatheredNumber += 4;
+					GatheredNumber += RuleNumbers[3][0];
 					break;
 				case 4: case 5: case 6:
-					GatheredNumber += 2;
+					GatheredNumber += RuleNumbers[3][1];
 					break;
 				case 7: case 8: case 9:
-					GatheredNumber += 3;
+					GatheredNumber += RuleNumbers[3][2];
 					break;
 				case 10: case 11: case 12:
-					GatheredNumber += 12;
+					GatheredNumber += RuleNumbers[3][3];
 					break;
 				case 13: case 14: case 15:
-					GatheredNumber += 1;
+					GatheredNumber += RuleNumbers[3][4];
 					break;
 				default:
-					GatheredNumber += 8;
+					GatheredNumber += RuleNumbers[3][5];
 					break;
 			}
 		}
@@ -352,22 +379,22 @@ public class HoleInOneScript : MonoBehaviour
 			switch (Bomb.GetSolvedModuleNames().Count())
 			{
 				case 0: case 1: case 2: case 3:
-					GatheredNumber += 12;
+					GatheredNumber += RuleNumbers[4][0];
 					break;
 				case 4: case 5: case 6:
-					GatheredNumber += 10;
+					GatheredNumber += RuleNumbers[4][1];
 					break;
 				case 7: case 8: case 9:
-					GatheredNumber += 18;
+					GatheredNumber += RuleNumbers[4][2];
 					break;
 				case 10: case 11: case 12:
-					GatheredNumber += 5;
+					GatheredNumber += RuleNumbers[4][3];
 					break;
 				case 13: case 14: case 15:
-					GatheredNumber += 7;
+					GatheredNumber += RuleNumbers[4][4];
 					break;
 				default:
-					GatheredNumber += 3;
+					GatheredNumber += RuleNumbers[4][5];
 					break;
 			}
 		}
