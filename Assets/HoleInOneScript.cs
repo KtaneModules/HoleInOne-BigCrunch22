@@ -186,8 +186,8 @@ public class HoleInOneScript : MonoBehaviour
 			if (Bomb.GetSerialNumberNumbers().Last() % 2 == 0)
 			{
 				Debug.LogFormat("[Hole in One #{0}] The last digit of the serial is even. You must perform the Caesar shift forwards.", moduleId);
-				Debug.LogFormat("[Hole in One #{0}] The focused letter is {1}", moduleId, NumberTable[StoredValue % 5][BallValue]);
-				PowerNeeded = (Array.IndexOf(Alphabreak, NumberTable[StoredValue % 5][BallValue]) + StoredValue) % 26;
+				Debug.LogFormat("[Hole in One #{0}] The focused letter is {1}", moduleId, NumberTable[BallValue][StoredValue % 5]);
+				PowerNeeded = (Array.IndexOf(Alphabreak, NumberTable[BallValue][StoredValue % 5]) + StoredValue) % 26;
 				Debug.LogFormat("[Hole in One #{0}] After performing the Caesar shift, the current letter must be the letter \"{1}\"", moduleId, Alphabreak[PowerNeeded]);
 				PowerNeeded = 25 - PowerNeeded;
 				Debug.LogFormat("[Hole in One #{0}] After performing the Atbash cipher, the correct letter must be \"{1}\"", moduleId, Alphabreak[PowerNeeded]);
@@ -197,8 +197,8 @@ public class HoleInOneScript : MonoBehaviour
 			else
 			{
 				Debug.LogFormat("[Hole in One #{0}] The last digit of the serial is odd. You must perform the Caesar shift backwards.", moduleId);
-				Debug.LogFormat("[Hole in One #{0}] The focused letter is {1}", moduleId, NumberTable[StoredValue % 5][BallValue]);
-				PowerNeeded = Array.IndexOf(Alphabreak, NumberTable[StoredValue % 5][BallValue]) - StoredValue;
+				Debug.LogFormat("[Hole in One #{0}] The focused letter is {1}", moduleId, NumberTable[BallValue][StoredValue % 5]);
+				PowerNeeded = Array.IndexOf(Alphabreak, NumberTable[BallValue][StoredValue % 5]) - StoredValue;
 				while (PowerNeeded < 0)
 				{
 					PowerNeeded += 26;
